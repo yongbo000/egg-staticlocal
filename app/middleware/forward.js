@@ -1,0 +1,21 @@
+'use strict';
+
+module.exports = (_, app) => {
+  const rootUrl = app.config.staticlocal.staticServer;
+  return function* forward(next) {
+    if (!/\.js|\.css/.test(this.url) || !rootUrl) {
+      return yield next;
+    }
+
+    const assetsUrl = rootUrl + this.url;
+    const result = yield this.app.curl(assetsUrl, {
+      streaming: true,
+      timeout: 10000,
+    });
+    this.coreLogger.info('[egg-staticlocal] forward %s to %s, status: %s, headers: %j',
+      this.url, assetsUrl, result.status, result.headers);
+    this.set(result.headers);
+    this.status = result.status;
+    this.body = result.res;
+  };
+};
