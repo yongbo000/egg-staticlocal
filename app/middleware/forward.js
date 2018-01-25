@@ -1,12 +1,11 @@
 'use strict';
 
 module.exports = (_, app) => {
-  const rootUrl = app.config.staticlocal.staticServer;
   return function* forward(next) {
+    const rootUrl = app.config.staticlocal.staticServer;
     if (!/\.js|\.css/.test(this.url) || !rootUrl) {
       return yield next;
     }
-
     const assetsUrl = rootUrl + this.url;
     const result = yield this.app.curl(assetsUrl, {
       streaming: true,
