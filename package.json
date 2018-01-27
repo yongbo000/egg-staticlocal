@@ -1,6 +1,6 @@
 {
   "name": "egg-staticlocal",
-  "version": "1.1.0",
+  "version": "0.0.1",
   "description": "",
   "eggPlugin": {
     "name": "staticlocal"
@@ -28,9 +28,10 @@
     "egg-bin": "^4.3.7",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.14.0",
-    "egg-view-nunjucks": "^2.1.4",
+    "egg-subapp": "^1.2.0",
     "eslint": "^4.14.0",
     "eslint-config-egg": "^6.0.0",
+    "rimraf": "^2.6.2",
     "webstorm-disable-index": "^1.2.0"
   },
   "engines": {
