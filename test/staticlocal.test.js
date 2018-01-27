@@ -13,8 +13,8 @@ function commonGet(appname) {
   return {
     reset() {
       rimraf.sync(jsonMapPath);
-      // rimraf.sync(path.join(cwd, 'dist'));
-      // rimraf.sync(path.join(cwd, 'run'));
+      rimraf.sync(path.join(cwd, 'dist'));
+      rimraf.sync(path.join(cwd, 'run'));
     },
     jsonMapPath,
     cwd,
