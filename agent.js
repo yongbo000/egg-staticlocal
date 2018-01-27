@@ -22,10 +22,8 @@ module.exports = agent => {
       agentConfig.name, origin);
   });
 
-  // 需要等待 App Worker 启动成功后才能发送，不然很可能丢失
   agent.messenger.once('egg-ready', () => {
     agent.messenger.sendToApp('staticlocalAddressChanged', origin);
-    // 监听后续 worker reload
     agent.messenger.on('egg-staticlocal-worker-started', () => {
       agent.messenger.sendToApp('staticlocalAddressChanged', origin);
     });
@@ -33,9 +31,7 @@ module.exports = agent => {
 };
 
 function startServer(options) {
-  // 子进程来起 server
   const workerFile = path.join(__dirname, 'lib/static_worker.js');
-  // don't enable inspect on static_worker process
   const execArgv = [].concat(process.execArgv.filter(argv => {
     return !argv.startsWith('--debug-port') && !argv.startsWith('--inspect');
   }));
