@@ -1,5 +1,3 @@
-'use strict';
-
 const address = require('address');
 const path = require('path');
 const childProcess = require('child_process');

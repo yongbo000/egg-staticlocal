@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const spawn = require('child_process').spawn;
 const bin = require.resolve('webpack/bin/webpack');
 const getWebpackConfigPath = require('../lib/util').getWebpackConfigPath;

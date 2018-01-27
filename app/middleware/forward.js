@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (_, app) => {
   return function* forward(next) {
     const rootUrl = app.config.staticlocal.staticServer;

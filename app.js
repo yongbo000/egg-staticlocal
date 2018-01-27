@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = app => {
   app.config.coreMiddleware.push('forward');
   app.messenger.on('staticlocalAddressChanged', address => {

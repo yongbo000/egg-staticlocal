@@ -11,13 +11,23 @@
     "egg-plugin"
   ],
   "dependencies": {
+    "@babel/core": "^7.0.0-beta.38",
+    "@babel/preset-env": "^7.0.0-beta.38",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^8.0.0-beta.0",
     "commander": "^2.13.0",
+    "css-loader": "^0.28.9",
     "egg-core": "^4.3.0",
+    "file-loader": "^1.1.6",
     "globby": "^7.1.1",
     "is-type-of": "^1.2.0",
     "koa-webpack-dev-middleware": "^2.0.2",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "map-json-webpack-plugin": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "style-loader": "^0.20.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
@@ -31,6 +41,7 @@
     "egg-subapp": "^1.2.0",
     "eslint": "^4.14.0",
     "eslint-config-egg": "^6.0.0",
+    "eslint-plugin-import": "^2.8.0",
     "rimraf": "^2.6.2",
     "webstorm-disable-index": "^1.2.0"
   },

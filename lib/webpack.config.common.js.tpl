@@ -1,21 +1,27 @@
-'use strict';
-
 module.exports = function(webpackConfig = {}) {
   return Object.assign(webpackConfig, {
     module: {
-      loaders: [
-        // {
-        //   test: /\.jsx$/,
-        //   exclude: /node_modules/,
-        //   loaders: ['babel-loader?stage=0'],
-        // },
-        // {
-        //   test: /\.js$/,
-        //   exclude: /node_modules/,
-        //   loader: 'babel-loader?stage=0',
-        // },
-        { test: /\.css$/, loader: 'style!css' },
-        { test: /\.less$/, loader: 'style!css!less' },
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+        },
+        {
+          test: /\.less$/,
+          use: [{
+            loader: "style-loader",
+          }, {
+            loader: "css-loader",
+          }, {
+            loader: "less-loader",
+          }],
+        },
         { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff' },
         { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff' },
         { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&minetype=application/octet-stream' },
@@ -26,10 +32,6 @@ module.exports = function(webpackConfig = {}) {
     externals: {
     },
     plugins: [
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'common',
-      //   minChunks: 2,
-      // }),
     ],
   });
 };

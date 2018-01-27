@@ -1,4 +1,2 @@
-'use strict';
-
 exports.staticlocal = {
 };
