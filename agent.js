@@ -3,6 +3,8 @@ const path = require('path');
 const childProcess = require('child_process');
 
 module.exports = agent => {
+  if (!agent.config.staticlocal.enable) return;
+
   const agentConfig = agent.config;
 
   let origin;

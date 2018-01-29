@@ -22,6 +22,36 @@ function commonGet(appname) {
 }
 
 describe('test/staticlocal.test.js', () => {
+  describe('prod should not work', () => {
+    const { reset, jsonMapPath } = commonGet('staticlocal');
+
+    beforeEach(reset);
+    after(reset);
+
+    let app;
+    before(() => {
+      mock.env('prod');
+      app = mock.app({
+        baseDir: 'apps/staticlocal',
+      });
+      return app.ready();
+    });
+
+    after(() => {
+      app.close();
+    });
+
+    afterEach(mock.restore);
+
+    it('should local static server work', () => {
+      assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
+      assert(app.config.staticlocal.staticServer === undefined, 'should staticServer not exist');
+      return app.httpRequest()
+        .get('/assets_entry_index.js')
+        .expect(404);
+    });
+  });
+
   describe('single app', () => {
     const { reset, jsonMapPath, cwd } = commonGet('staticlocal');
 
@@ -31,6 +61,7 @@ describe('test/staticlocal.test.js', () => {
     describe('local static server', () => {
       let app;
       before(() => {
+        mock.env('local');
         app = mock.app({
           baseDir: 'apps/staticlocal',
         });
@@ -77,6 +108,7 @@ describe('test/staticlocal.test.js', () => {
     describe('local static server', () => {
       let app;
       before(() => {
+        mock.env('local');
         app = mock.app({
           baseDir: 'apps/subapp',
         });
