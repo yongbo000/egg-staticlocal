@@ -1,7 +1,7 @@
 module.exports = (_, app) => {
   return function* forward(next) {
     const rootUrl = app.config.staticlocal.staticServer;
-    if (!/\.js|\.css/.test(this.url) || !rootUrl) {
+    if (!/\.js$|\.css$/.test(this.url) || !rootUrl) {
       return yield next;
     }
     const assetsUrl = rootUrl + this.url;

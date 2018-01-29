@@ -82,6 +82,12 @@ describe('test/staticlocal.test.js', () => {
           .expect(/hello,staticlocal/)
           .expect(200);
       });
+
+      it('not css js file should 404', () => {
+        return app.httpRequest()
+          .get('/assets_entry_index.jsx')
+          .expect(404);
+      });
     });
 
     it('should bin/build work', done => {
