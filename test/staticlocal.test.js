@@ -14,7 +14,7 @@ function commonGet(appname) {
   return {
     reset() {
       rimraf.sync(jsonMapPath);
-      rimraf.sync(path.join(cwd, 'dist'));
+      // rimraf.sync(path.join(cwd, 'dist'));
       rimraf.sync(path.join(cwd, 'run'));
     },
     jsonMapPath,
@@ -159,7 +159,7 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         assert.ok(fs.existsSync(distJs));
         const content = fs.readFileSync(distJs, 'utf-8');
-        assert.ok(content.includes('console.log(\'hello,staticlocal\')'), 'should js build success');
+        assert.ok(content.includes('console.log("hello,staticlocal")'), 'should js build success');
         assert.ok(content.includes('.global body {\\n  margin: 10px;\\n  padding: 10px;\\n}\\nhtml body .staticlocal {\\n  margin: 0;\\n  padding: 0;\\n}'), 'should less build success');
         assert.deepEqual(json, {
           'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-b26a8fd6aae6fafe3417.js',
