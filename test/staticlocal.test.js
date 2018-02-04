@@ -14,7 +14,7 @@ function commonGet(appname) {
   return {
     reset() {
       rimraf.sync(jsonMapPath);
-      // rimraf.sync(path.join(cwd, 'dist'));
+      rimraf.sync(path.join(cwd, 'dist'));
       rimraf.sync(path.join(cwd, 'run'));
     },
     jsonMapPath,
@@ -95,6 +95,7 @@ describe('test/staticlocal.test.js', () => {
         es.on('message', message => {
           const data = JSON.parse(message.data);
           assert(data.hash === '119f224f3c12892c9a6a', 'should hash right');
+          es.close();
           done();
         });
       });
