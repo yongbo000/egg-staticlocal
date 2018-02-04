@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = webpackConfig => {
   webpackConfig = require('./webpack.config.common')(webpackConfig);
@@ -8,6 +9,11 @@ module.exports = webpackConfig => {
     filename: '[name].js',
     chunkFilename: '[name].js',
   };
+
+  webpackConfig.plugins = webpackConfig.plugins.concat([
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+  ]);
 
   webpackConfig.entry = {{ entry }};
 

@@ -6,6 +6,7 @@ const assert = require('assert');
 const coffee = require('coffee');
 const rimraf = require('rimraf');
 const buildPath = require.resolve('../bin/build');
+const EventSource = require('eventsource');
 
 function commonGet(appname) {
   const cwd = path.join(__dirname, './fixtures/apps/', appname);
@@ -88,6 +89,15 @@ describe('test/staticlocal.test.js', () => {
           .get('/assets_entry_index.jsx')
           .expect(404);
       });
+
+      it('hot reload', done => {
+        const es = new EventSource(`${app.config.staticlocal.staticServer}/__webpack_hmr`);
+        es.on('message', message => {
+          const data = JSON.parse(message.data);
+          assert(data.hash === '119f224f3c12892c9a6a', 'should hash right');
+          done();
+        });
+      });
     });
 
     it('should bin/build work', done => {
@@ -98,7 +108,7 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
         assert.deepEqual(json, {
-          'assets_entry_index.js': 'assets_entry_index-7b0fb35fa30359cf45cb.js',
+          'assets_entry_index.js': 'assets_entry_index-16e48e82c1f47ec8fc84.js',
         });
         done();
       });
@@ -152,7 +162,7 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(content.includes('console.log(\'hello,staticlocal\')'), 'should js build success');
         assert.ok(content.includes('.global body {\\n  margin: 10px;\\n  padding: 10px;\\n}\\nhtml body .staticlocal {\\n  margin: 0;\\n  padding: 0;\\n}'), 'should less build success');
         assert.deepEqual(json, {
-          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-5efe77f96657b4b4932f.js',
+          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-b26a8fd6aae6fafe3417.js',
         });
         done();
       });

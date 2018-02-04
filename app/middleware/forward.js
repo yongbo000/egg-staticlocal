@@ -1,7 +1,7 @@
 module.exports = (_, app) => {
   return function* forward(next) {
     const rootUrl = app.config.staticlocal.staticServer;
-    if (!/\.js$|\.css$/.test(this.url) || !rootUrl) {
+    if (!/\.js$|\.css$|[0-9a-f]+\.hot-update.js(on|.map)?$|__webpack_hmr/.test(this.url) || !rootUrl) {
       return yield next;
     }
     const assetsUrl = rootUrl + this.url;

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 const mapJsonWebpackPlugin = require('map-json-webpack-plugin');
 
 module.exports = webpackConfig => {
@@ -9,9 +10,12 @@ module.exports = webpackConfig => {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
   };
-  webpackConfig.plugins.push(mapJsonWebpackPlugin({
-    output: 'config/map.json',
-  }));
+  webpackConfig.plugins = webpackConfig.plugins.concat([
+    new webpack.optimize.UglifyJsPlugin(),
+    mapJsonWebpackPlugin({
+      output: 'config/map.json',
+    }),
+  ]);
 
   webpackConfig.entry = {{ entry }};
 

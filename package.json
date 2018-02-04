@@ -5,6 +5,9 @@
   "eggPlugin": {
     "name": "staticlocal"
   },
+  "env": [
+    "local"
+  ],
   "keywords": [
     "egg",
     "eggPlugin",
@@ -22,6 +25,7 @@
     "globby": "^7.1.1",
     "is-type-of": "^1.2.0",
     "koa-webpack-dev-middleware": "^2.0.2",
+    "koa-webpack-hot-middleware": "^1.0.3",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "map-json-webpack-plugin": "^1.2.0",
@@ -42,6 +46,7 @@
     "eslint": "^4.14.0",
     "eslint-config-egg": "^6.0.0",
     "eslint-plugin-import": "^2.8.0",
+    "eventsource": "^1.0.5",
     "rimraf": "^2.6.2",
     "webstorm-disable-index": "^1.2.0"
   },
