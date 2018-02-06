@@ -16,11 +16,13 @@
   "dependencies": {
     "@babel/core": "^7.0.0-beta.38",
     "@babel/preset-env": "^7.0.0-beta.38",
+    "autoprefixer": "^7.2.5",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^8.0.0-beta.0",
     "commander": "^2.13.0",
     "css-loader": "^0.28.9",
     "egg-core": "^4.3.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "globby": "^7.1.1",
     "is-type-of": "^1.2.0",
@@ -30,6 +32,8 @@
     "less-loader": "^4.0.5",
     "map-json-webpack-plugin": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "postcss-loader": "^2.1.0",
+    "rucksack-css": "^1.0.2",
     "style-loader": "^0.20.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0"

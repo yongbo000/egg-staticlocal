@@ -94,7 +94,7 @@ describe('test/staticlocal.test.js', () => {
         const es = new EventSource(`${app.config.staticlocal.staticServer}/__webpack_hmr`);
         es.on('message', message => {
           const data = JSON.parse(message.data);
-          assert(data.hash === '119f224f3c12892c9a6a', 'should hash right');
+          assert(data.hash === '893f309ec7ba926035bf', 'should hash right');
           es.close();
           done();
         });
@@ -109,7 +109,7 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
         assert.deepEqual(json, {
-          'assets_entry_index.js': 'assets_entry_index-16e48e82c1f47ec8fc84.js',
+          'assets_entry_index.js': 'assets_entry_index-3797ee2c1a0291a3a77e.js',
         });
         done();
       });
@@ -144,8 +144,15 @@ describe('test/staticlocal.test.js', () => {
         return app.httpRequest()
           .get('/demo.subapp.com_assets_entry_index.js')
           .set('Cookie', 'demo.subapp.com')
-          .expect(/\.global body/)
-          .expect(/body \.staticlocal/)
+          .expect(/index\.js build success/)
+          .expect(200);
+      });
+
+      it('should less entry work', () => {
+        return app.httpRequest()
+          .get('/demo.subapp.com_assets_entry_index.css')
+          .set('Cookie', 'demo.subapp.com')
+          .expect('.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
           .expect(200);
       });
     });
@@ -154,16 +161,17 @@ describe('test/staticlocal.test.js', () => {
       coffee.fork(buildPath, [], {
         cwd,
       }).end(err => {
-        const json = require(jsonMapPath);
-        const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
         assert.ifError(err);
         assert.ok(fs.existsSync(jsonMapPath));
+        const json = require(jsonMapPath);
+        const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
         assert.ok(fs.existsSync(distJs));
         const content = fs.readFileSync(distJs, 'utf-8');
-        assert.ok(content.includes('console.log("hello,staticlocal")'), 'should js build success');
-        assert.ok(content.includes('.global body {\\n  margin: 10px;\\n  padding: 10px;\\n}\\nhtml body .staticlocal {\\n  margin: 0;\\n  padding: 0;\\n}'), 'should less build success');
+        assert.ok(content.includes('index.js build success'), 'should js build success');
+        assert.ok(content.includes('import a.js success'), 'should import a.js success');
         assert.deepEqual(json, {
-          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-b26a8fd6aae6fafe3417.js',
+          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-8f7e790f93d8c176696f.js',
+          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-8f7e790f93d8c176696f.css',
         });
         done();
       });

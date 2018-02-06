@@ -1,3 +1,4 @@
-import './index.less';
+import '../a.js';
+import '../a.less';
 
-console.log('hello,staticlocal');
+console.log('index.js build success');

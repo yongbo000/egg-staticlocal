@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = webpackConfig => {
   webpackConfig = require('./webpack.config.common')(webpackConfig);
@@ -8,11 +9,16 @@ module.exports = webpackConfig => {
     path: path.join('{{ cwd }}', 'dist'),
     filename: '[name].js',
     chunkFilename: '[name].js',
+    publicPath: '/',
   };
 
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new ExtractTextPlugin({
+      filename: '[name].css',
+      allChunks: true,
+    }),
   ]);
 
   webpackConfig.entry = {{ entry }};
