@@ -173,6 +173,24 @@ describe('test/staticlocal.test.js', () => {
             .expect(200);
         });
       });
+
+      describe('should subdir entry build well', () => {
+        it('css build well', () => {
+          return app.httpRequest()
+            .get('/demo.subapp.com_assets_entry_subdir_index.js')
+            .set('Cookie', 'demo.subapp.com')
+            .expect(/subdir\/index\.js build success/)
+            .expect(200);
+        });
+
+        it('js build well', () => {
+          return app.httpRequest()
+            .get('/demo.subapp.com_assets_entry_subdir_index.css')
+            .set('Cookie', 'demo.subapp.com')
+            .expect('.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
+            .expect(200);
+        });
+      });
     });
 
     it('should bin/build work', done => {
@@ -190,8 +208,10 @@ describe('test/staticlocal.test.js', () => {
         assert.deepEqual(json, {
           'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.css',
           'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.js',
-          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-aa705587fce61974e7fc.css',
-          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-aa705587fce61974e7fc.js',
+          'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-080db0614d85511feda3.css',
+          'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-080db0614d85511feda3.js',
+          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-9e4974fcbcd5ad4afc07.css',
+          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-9e4974fcbcd5ad4afc07.js',
         });
         done();
       });
