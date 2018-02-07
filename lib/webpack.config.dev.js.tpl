@@ -21,6 +21,12 @@ module.exports = webpackConfig => {
     }),
   ]);
 
+  for (const rule of webpackConfig.module.rules) {
+    if (rule.test.test('.css') || rule.test.test('.less')) {
+      rule.use.unshift('css-hot-loader');
+    }
+  }
+
   webpackConfig.entry = {{ entry }};
 
   // 加载自定义配置
