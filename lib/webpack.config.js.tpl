@@ -12,6 +12,7 @@ module.exports = webpackConfig => {
     chunkFilename: '[name]-[chunkhash].js',
     publicPath: '/',
   };
+
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.optimize.UglifyJsPlugin(),
     mapJsonWebpackPlugin({
