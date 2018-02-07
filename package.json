@@ -1,6 +1,6 @@
 {
   "name": "egg-staticlocal",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "eggPlugin": {
     "name": "staticlocal"
@@ -20,6 +20,7 @@
     "babel-eslint": "^8.2.1",
     "babel-loader": "^8.0.0-beta.0",
     "commander": "^2.13.0",
+    "css-hot-loader": "^1.3.6",
     "css-loader": "^0.28.9",
     "egg-core": "^4.3.0",
     "extract-text-webpack-plugin": "^3.0.2",
