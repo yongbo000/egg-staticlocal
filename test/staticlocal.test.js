@@ -155,6 +155,24 @@ describe('test/staticlocal.test.js', () => {
           .expect('.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
           .expect(200);
       });
+
+      describe('should second subapp assets build well', () => {
+        it('css build well', () => {
+          return app.httpRequest()
+            .get('/second.subapp.com_assets_entry_index.js')
+            .set('Cookie', 'second.subapp.com')
+            .expect(/index\.js build success/)
+            .expect(200);
+        });
+
+        it('js build well', () => {
+          return app.httpRequest()
+            .get('/second.subapp.com_assets_entry_index.css')
+            .set('Cookie', 'second.subapp.com')
+            .expect('.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
+            .expect(200);
+        });
+      });
     });
 
     it('should bin/build work', done => {
@@ -170,8 +188,10 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(content.includes('index.js build success'), 'should js build success');
         assert.ok(content.includes('import a.js success'), 'should import a.js success');
         assert.deepEqual(json, {
-          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-8f7e790f93d8c176696f.js',
-          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-8f7e790f93d8c176696f.css',
+          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.css',
+          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.js',
+          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-aa705587fce61974e7fc.css',
+          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-aa705587fce61974e7fc.js',
         });
         done();
       });
