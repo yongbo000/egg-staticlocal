@@ -109,8 +109,12 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
         assert.deepEqual(json, {
-          'assets_entry_index.js': 'assets_entry_index-3797ee2c1a0291a3a77e.js',
+          'assets_entry_index.js': 'assets_entry_index-e6e860cd1071d38de1d0.js',
         });
+        const distJs = path.join(cwd, 'dist', json['assets_entry_index.js']);
+        const content = fs.readFileSync(distJs, 'utf-8');
+        assert.ok(content.includes('hello,staticlocal'), 'should js build success');
+        assert.ok(!content.includes('Hot Module Replacement'), 'should no hrm');
         done();
       });
     });
@@ -200,19 +204,20 @@ describe('test/staticlocal.test.js', () => {
         assert.ifError(err);
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
+        assert.deepEqual(json, {
+          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.css',
+          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.js',
+          'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.css',
+          'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.js',
+          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-90386515deb511d91029.css',
+          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-90386515deb511d91029.js',
+        });
         const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
         assert.ok(fs.existsSync(distJs));
         const content = fs.readFileSync(distJs, 'utf-8');
         assert.ok(content.includes('index.js build success'), 'should js build success');
         assert.ok(content.includes('import a.js success'), 'should import a.js success');
-        assert.deepEqual(json, {
-          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.css',
-          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-04f5b1b8909e65efc751.js',
-          'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-080db0614d85511feda3.css',
-          'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-080db0614d85511feda3.js',
-          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-9e4974fcbcd5ad4afc07.css',
-          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-9e4974fcbcd5ad4afc07.js',
-        });
+        assert.ok(!content.includes('Hot Module Replacement'), 'should no hrm');
         done();
       });
     });
