@@ -1,6 +1,6 @@
 {
   "name": "egg-staticlocal",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "一个egg插件，用于开发阶段帮你起可本地调试的静态服务",
   "eggPlugin": {
     "name": "staticlocal"
