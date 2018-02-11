@@ -197,28 +197,72 @@ describe('test/staticlocal.test.js', () => {
       });
     });
 
-    it('should bin/build work', done => {
-      coffee.fork(buildPath, [], {
-        cwd,
-      }).end(err => {
-        assert.ifError(err);
-        assert.ok(fs.existsSync(jsonMapPath));
-        const json = require(jsonMapPath);
-        assert.deepEqual(json, {
-          'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.css',
-          'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.js',
-          'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.css',
-          'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.js',
-          'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-90386515deb511d91029.css',
-          'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-90386515deb511d91029.js',
+    describe('should bin/build work', () => {
+      it('bin/build --env prod', done => {
+        coffee.fork(buildPath, [], {
+          cwd,
+        }).end(err => {
+          assert.ifError(err);
+          assert.ok(fs.existsSync(jsonMapPath));
+          const json = require(jsonMapPath);
+          assert.deepEqual(json, {
+            'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.css',
+            'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-e0736bd3fead4eec51a9.js',
+            'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.css',
+            'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-c6f035092e1009e0277e.js',
+            'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-90386515deb511d91029.css',
+            'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-90386515deb511d91029.js',
+          });
+          const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
+          const webpackConfigJs = path.join(cwd, 'run/webpack.config.js');
+          const webpackDevConfigJs = path.join(cwd, 'run/webpack.configd.dev.js');
+          assert.ok(fs.existsSync(distJs));
+          assert.ok(fs.existsSync(webpackConfigJs));
+          assert.ok(!fs.existsSync(webpackDevConfigJs));
+          const content = fs.readFileSync(distJs, 'utf-8');
+          assert.ok(content.includes('index.js build success'), 'should js build success');
+          assert.ok(content.includes('import a.js success'), 'should import a.js success');
+          assert.ok(!content.includes('Hot Module Replacement'), 'should no hrm');
+
+          const webpackConfig = require(webpackConfigJs)({});
+          const hasHmr = Object.keys(webpackConfig.entry).some(key => {
+            if (Array.isArray(webpackConfig.entry[key])) {
+              return webpackConfig.entry[key].some(filePath => {
+                return filePath.includes('__webpack_hmr');
+              });
+            }
+            return webpackConfig.entry[key].includes('__webpack_hmr');
+          });
+          assert.equal(hasHmr, false, 'should has hrm');
+          done();
         });
-        const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
-        assert.ok(fs.existsSync(distJs));
-        const content = fs.readFileSync(distJs, 'utf-8');
-        assert.ok(content.includes('index.js build success'), 'should js build success');
-        assert.ok(content.includes('import a.js success'), 'should import a.js success');
-        assert.ok(!content.includes('Hot Module Replacement'), 'should no hrm');
-        done();
+      });
+
+      it('bin/build --env local', done => {
+        coffee.fork(buildPath, [
+          '--env',
+          'local',
+        ], {
+          cwd,
+        }).end(err => {
+          assert.ifError(err);
+          assert.ok(!fs.existsSync(jsonMapPath));
+          const webpackConfigJs = path.join(cwd, 'run/webpack.config.js');
+          const webpackDevConfigJs = path.join(cwd, 'run/webpack.config.dev.js');
+          assert.ok(!fs.existsSync(webpackConfigJs));
+          assert.ok(fs.existsSync(webpackDevConfigJs));
+          const webpackDevConfig = require(webpackDevConfigJs)({});
+          const hasHmr = Object.keys(webpackDevConfig.entry).some(key => {
+            if (Array.isArray(webpackDevConfig.entry[key])) {
+              return webpackDevConfig.entry[key].some(filePath => {
+                return filePath.includes('__webpack_hmr');
+              });
+            }
+            return webpackDevConfig.entry[key].includes('__webpack_hmr');
+          });
+          assert.equal(hasHmr, true, 'should has hrm');
+          done();
+        });
       });
     });
   });
