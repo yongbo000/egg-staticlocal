@@ -22,8 +22,18 @@ function commonGet(appname) {
   };
 }
 
+function getRequest(app) {
+  return async url => {
+    url = `${app.config.staticlocal.staticServer}/${url}`;
+    return await app.curl(url, {
+      dataType: 'text',
+    });
+  };
+}
+
 describe('test/staticlocal.test.js', () => {
-  describe('prod should not work', () => {
+  let request;
+  describe('prod env', () => {
     const { reset, jsonMapPath } = commonGet('staticlocal');
 
     beforeEach(reset);
@@ -44,12 +54,9 @@ describe('test/staticlocal.test.js', () => {
 
     afterEach(mock.restore);
 
-    it('should local static server work', () => {
+    it('should no local static server ', async () => {
       assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
       assert(app.config.staticlocal.staticServer === undefined, 'should staticServer not exist');
-      return app.httpRequest()
-        .get('/assets_entry_index.js')
-        .expect(404);
     });
   });
 
@@ -66,6 +73,7 @@ describe('test/staticlocal.test.js', () => {
         app = mock.app({
           baseDir: 'apps/staticlocal',
         });
+        request = getRequest(app);
         return app.ready();
       });
 
@@ -75,19 +83,16 @@ describe('test/staticlocal.test.js', () => {
 
       afterEach(mock.restore);
 
-      it('should local static server work', () => {
+      it('should local static server work', async () => {
         assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
         assert(app.config.staticlocal.staticServer.startsWith('http://' + address.ip()), 'should staticServer exist');
-        return app.httpRequest()
-          .get('/assets_entry_index.js')
-          .expect(/hello,staticlocal/)
-          .expect(200);
+        const ret = await request('/assets_entry_index.js');
+        assert(/hello,staticlocal/.test(ret.data));
       });
 
-      it('not css js file should 404', () => {
-        return app.httpRequest()
-          .get('/assets_entry_index.jsx')
-          .expect(404);
+      it('not css js file should 404', async () => {
+        const ret = await request('/assets_entry_index.jsx');
+        assert(ret.status === 404);
       });
 
       it('hot reload', done => {
@@ -98,6 +103,13 @@ describe('test/staticlocal.test.js', () => {
           es.close();
           done();
         });
+      });
+
+      it('view js/css should render success', async () => {
+        return app.httpRequest()
+          .get('/assets.html')
+          .expect(`<script type="text/javascript" src="${app.config.staticlocal.staticServer}/entry_index.js"></script>\n`)
+          .expect(200);
       });
     });
 
@@ -133,6 +145,7 @@ describe('test/staticlocal.test.js', () => {
         app = mock.app({
           baseDir: 'apps/subapp',
         });
+        request = getRequest(app);
         return app.ready();
       });
 
@@ -142,57 +155,39 @@ describe('test/staticlocal.test.js', () => {
 
       afterEach(mock.restore);
 
-      it('should local static server work', () => {
+      it('should local static server work', async () => {
         assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
         assert(app.config.staticlocal.staticServer.startsWith('http://' + address.ip()), 'should staticServer exist');
-        return app.httpRequest()
-          .get('/demo.subapp.com_assets_entry_index.js')
-          .set('Cookie', 'demo.subapp.com')
-          .expect(/index\.js build success/)
-          .expect(200);
+        const ret = await request('/demo.subapp.com_assets_entry_index.js');
+        assert(/index\.js build success/.test(ret.data));
       });
 
-      it('should less entry work', () => {
-        return app.httpRequest()
-          .get('/demo.subapp.com_assets_entry_index.css')
-          .set('Cookie', 'demo.subapp.com')
-          .expect('.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
-          .expect(200);
+      it('should less entry work', async () => {
+        const ret = await request('/demo.subapp.com_assets_entry_index.css');
+        assert(ret.data === '.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}');
       });
 
       describe('should second subapp assets build well', () => {
-        it('css build well', () => {
-          return app.httpRequest()
-            .get('/second.subapp.com_assets_entry_index.js')
-            .set('Cookie', 'second.subapp.com')
-            .expect(/index\.js build success/)
-            .expect(200);
+        it('css build well', async () => {
+          const ret = await request('/second.subapp.com_assets_entry_index.js');
+          assert(/index\.js build success/.test(ret.data));
         });
 
-        it('js build well', () => {
-          return app.httpRequest()
-            .get('/second.subapp.com_assets_entry_index.css')
-            .set('Cookie', 'second.subapp.com')
-            .expect('.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
-            .expect(200);
+        it('js build well', async () => {
+          const ret = await request('/second.subapp.com_assets_entry_index.css');
+          assert(ret.data === '.global body{margin:10px;padding:10px}.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}');
         });
       });
 
       describe('should subdir entry build well', () => {
-        it('css build well', () => {
-          return app.httpRequest()
-            .get('/demo.subapp.com_assets_entry_subdir_index.js')
-            .set('Cookie', 'demo.subapp.com')
-            .expect(/subdir\/index\.js build success/)
-            .expect(200);
+        it('css build well', async () => {
+          const ret = await request('/demo.subapp.com_assets_entry_subdir_index.js');
+          assert(/subdir\/index\.js build success/.test(ret.data));
         });
 
-        it('js build well', () => {
-          return app.httpRequest()
-            .get('/demo.subapp.com_assets_entry_subdir_index.css')
-            .set('Cookie', 'demo.subapp.com')
-            .expect('.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}')
-            .expect(200);
+        it('js build well', async () => {
+          const ret = await request('/demo.subapp.com_assets_entry_subdir_index.css');
+          assert(ret.data === '.a .css{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}');
         });
       });
     });

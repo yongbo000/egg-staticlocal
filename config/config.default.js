@@ -1,7 +1,7 @@
 module.exports = appInfo => {
   return {
     staticlocal: {
-      enable: appInfo.env === 'local',
+      enable: appInfo.env !== 'prod',
     },
   };
 };

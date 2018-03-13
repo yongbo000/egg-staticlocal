@@ -48,6 +48,7 @@
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.14.0",
     "egg-subapp": "^1.2.0",
+    "egg-view-nunjucks": "^2.1.6",
     "eslint": "^4.14.0",
     "eslint-config-egg": "^6.0.0",
     "eslint-plugin-import": "^2.8.0",
