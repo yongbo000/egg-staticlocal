@@ -96,7 +96,11 @@ describe('test/staticlocal.test.js', () => {
       });
 
       it('hot reload', done => {
-        const es = new EventSource(`${app.config.staticlocal.staticServer}/__webpack_hmr`);
+        const ret = app.httpRequest().get('/__webpack_hmr');
+        const es = new EventSource(ret.url);
+        es.on('open', message => {
+          assert(message.type === 'open');
+        });
         es.on('message', message => {
           const data = JSON.parse(message.data);
           assert(data.hash === 'fc3d82e7c6a550be6fe4', 'should hash right');
