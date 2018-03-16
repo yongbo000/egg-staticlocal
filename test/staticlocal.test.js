@@ -108,7 +108,7 @@ describe('test/staticlocal.test.js', () => {
         });
         es.on('message', message => {
           const data = JSON.parse(message.data);
-          assert(data.hash === 'fc3d82e7c6a550be6fe4', 'should hash right');
+          assert(data.hash === '1439a8da40a6b70801bc', 'should hash right');
           es.close();
           done();
         });
@@ -130,7 +130,7 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
         assert.deepEqual(json, {
-          'assets_entry_index.js': 'assets_entry_index-8da40109fe79a9c68619.js',
+          'assets_entry_index.js': 'assets_entry_index-990867f87d3ea59c6cd1.js',
         });
         const distJs = path.join(cwd, 'dist', json['assets_entry_index.js']);
         const content = fs.readFileSync(distJs, 'utf-8');
@@ -215,12 +215,12 @@ describe('test/staticlocal.test.js', () => {
           assert.ok(fs.existsSync(jsonMapPath));
           const json = require(jsonMapPath);
           assert.deepEqual(json, {
-            'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-0fe28dee1b4d9e82659d.css',
-            'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-0fe28dee1b4d9e82659d.js',
+            'demo.subapp.com_assets_entry_index.css': 'demo.subapp.com_assets_entry_index-b1b84a61e3af03bdad8f.css',
+            'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-b1b84a61e3af03bdad8f.js',
             'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-909add3df7d3c2f0b1c1.css',
             'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-909add3df7d3c2f0b1c1.js',
-            'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-cf1a921257dd67a5b7f2.css',
-            'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-cf1a921257dd67a5b7f2.js',
+            'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-8288d7a3bcfa6a9e4278.css',
+            'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-8288d7a3bcfa6a9e4278.js',
           });
           const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
           const webpackConfigJs = path.join(cwd, 'run/webpack.config.js');
