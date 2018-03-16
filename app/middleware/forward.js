@@ -5,7 +5,7 @@ module.exports = (_, app) => {
     if (!/[0-9a-f]+\.hot-update.js(on|.map)?$|__webpack_hmr/.test(this.path) || !rootUrl) {
       return yield next;
     }
-    const assetsUrl = rootUrl + this.path;
+    const assetsUrl = rootUrl + this.url;
     const result = yield this.app.curl(assetsUrl, {
       streaming: true,
       timeout: 10000,

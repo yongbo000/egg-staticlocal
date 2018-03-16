@@ -1,5 +1,3 @@
-
-
 const RE_SCRIPT = /\.(?:js|jsx)$/;
 const RE_STYLE = /\.(?:css|less|styl|scss|sass)$/;
 
