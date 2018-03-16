@@ -90,6 +90,11 @@ describe('test/staticlocal.test.js', () => {
         assert(/hello,staticlocal/.test(ret.data));
       });
 
+      it('with query params', async () => {
+        const ret = await request('/assets_entry_index.js?t=111111');
+        assert(/hello,staticlocal/.test(ret.data));
+      });
+
       it('not css js file should 404', async () => {
         const ret = await request('/assets_entry_index.jsx');
         assert(ret.status === 404);
@@ -163,6 +168,11 @@ describe('test/staticlocal.test.js', () => {
         assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
         assert(app.config.staticlocal.staticServer.startsWith('http://' + address.ip()), 'should staticServer exist');
         const ret = await request('/demo.subapp.com_assets_entry_index.js');
+        assert(/index\.js build success/.test(ret.data));
+      });
+
+      it('with query params', async () => {
+        const ret = await request('/demo.subapp.com_assets_entry_index.js?t=111111');
         assert(/index\.js build success/.test(ret.data));
       });
 
