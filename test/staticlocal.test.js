@@ -86,8 +86,10 @@ describe('test/staticlocal.test.js', () => {
       it('should local static server work', async () => {
         assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
         assert(app.config.staticlocal.staticServer.startsWith('http://' + address.ip()), 'should staticServer exist');
-        const ret = await request('/assets_entry_index.js');
+        let ret = await request('/assets_entry_index.js');
         assert(/hello,staticlocal/.test(ret.data));
+        ret = await request('/assets_index.entry.js');
+        assert(/hello,index.entry.js/.test(ret.data));
       });
 
       it('with query params', async () => {
@@ -108,16 +110,16 @@ describe('test/staticlocal.test.js', () => {
         });
         es.on('message', message => {
           const data = JSON.parse(message.data);
-          assert(data.hash === '1439a8da40a6b70801bc', 'should hash right');
+          assert(data.hash === '28711f9ae9c03ac96a0e', 'should hash right');
           es.close();
           done();
         });
       });
 
-      it('view js/css should render success', async () => {
+      it('view should render success', async () => {
         return app.httpRequest()
           .get('/assets.html')
-          .expect(`<script type="text/javascript" src="${app.config.staticlocal.staticServer}/entry_index.js"></script>\n`)
+          .expect(`<script type="text/javascript" src="${app.config.staticlocal.staticServer}/entry_index.js"></script>\n<script type="text/javascript" src="${app.config.staticlocal.staticServer}/assets_index.entry.js"></script>\n`)
           .expect(200);
       });
     });
@@ -130,7 +132,8 @@ describe('test/staticlocal.test.js', () => {
         assert.ok(fs.existsSync(jsonMapPath));
         const json = require(jsonMapPath);
         assert.deepEqual(json, {
-          'assets_entry_index.js': 'assets_entry_index-990867f87d3ea59c6cd1.js',
+          'assets_entry_index.js': 'assets_entry_index-abbbd507b9a74e723b71.js',
+          'assets_index.entry.js': 'assets_index.entry-7dab7296b9837c7e680e.js',
         });
         const distJs = path.join(cwd, 'dist', json['assets_entry_index.js']);
         const content = fs.readFileSync(distJs, 'utf-8');
@@ -167,8 +170,10 @@ describe('test/staticlocal.test.js', () => {
       it('should local static server work', async () => {
         assert(fs.existsSync(jsonMapPath) === false, 'should not exist map.json');
         assert(app.config.staticlocal.staticServer.startsWith('http://' + address.ip()), 'should staticServer exist');
-        const ret = await request('/demo.subapp.com_assets_entry_index.js');
+        let ret = await request('/demo.subapp.com_assets_entry_index.js');
         assert(/index\.js build success/.test(ret.data));
+        ret = await request('/demo.subapp.com_assets_index.entry.js');
+        assert(/hello,index.entry.js/.test(ret.data));
       });
 
       it('with query params', async () => {
@@ -219,8 +224,9 @@ describe('test/staticlocal.test.js', () => {
             'demo.subapp.com_assets_entry_index.js': 'demo.subapp.com_assets_entry_index-b1b84a61e3af03bdad8f.js',
             'demo.subapp.com_assets_entry_subdir_index.css': 'demo.subapp.com_assets_entry_subdir_index-909add3df7d3c2f0b1c1.css',
             'demo.subapp.com_assets_entry_subdir_index.js': 'demo.subapp.com_assets_entry_subdir_index-909add3df7d3c2f0b1c1.js',
-            'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-8288d7a3bcfa6a9e4278.css',
-            'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-8288d7a3bcfa6a9e4278.js',
+            'demo.subapp.com_assets_index.entry.js': 'demo.subapp.com_assets_index.entry-dfdd48072847fbcc73c4.js',
+            'second.subapp.com_assets_entry_index.css': 'second.subapp.com_assets_entry_index-dd699a9240c82616d13c.css',
+            'second.subapp.com_assets_entry_index.js': 'second.subapp.com_assets_entry_index-dd699a9240c82616d13c.js',
           });
           const distJs = path.join(cwd, 'dist', json['demo.subapp.com_assets_entry_index.js']);
           const webpackConfigJs = path.join(cwd, 'run/webpack.config.js');
