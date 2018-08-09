@@ -11,7 +11,7 @@ function isStyleFile(fileName) {
 
 module.exports = {
   getAssets(path) {
-    const subAppName = this.ctx._subAppName;
+    const subAppName = this.ctx.subApp && this.ctx.subApp.name;
     if (subAppName) {
       // assets/a.js => {assetsUrl}/{subAppName}_assets_a.js
       path = `${subAppName}_${path.replace(/\//g, '_')}`;
