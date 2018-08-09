@@ -6,3 +6,5 @@ exports.view = {
     '.html': 'nunjucks',
   },
 };
+
+exports.assetsUrl = 'https://demo.single.com';
