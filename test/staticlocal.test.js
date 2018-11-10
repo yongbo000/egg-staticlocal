@@ -119,7 +119,7 @@ describe('test/staticlocal.test.js', () => {
       it('view should render success', async () => {
         return app.httpRequest()
           .get('/assets.html')
-          .expect(`<script type="text/javascript" src="${app.config.staticlocal.staticServer}/entry_index.js"></script>\n<script type="text/javascript" src="${app.config.staticlocal.staticServer}/assets_index.entry.js"></script>\n`)
+          .expect(`<script type="text/javascript" src="${app.config.staticlocal.staticServer}/assets_entry_index.js"></script>\n<script type="text/javascript" src="${app.config.staticlocal.staticServer}/assets_index.entry.js"></script>\n`)
           .expect(200);
       });
     });
