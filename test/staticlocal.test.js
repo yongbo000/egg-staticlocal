@@ -110,7 +110,7 @@ describe('test/staticlocal.test.js', () => {
         });
         es.on('message', message => {
           const data = JSON.parse(message.data);
-          assert(data.hash === 'e815cd252802d7af20e5', 'should hash right');
+          assert(data.hash === 'cbc083ae1f7c2a1a7870', 'should hash right');
           es.close();
           done();
         });

@@ -1,6 +1,6 @@
 {
   "name": "egg-staticlocal",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "一个egg插件，用于开发阶段帮你起可本地调试的静态服务",
   "eggPlugin": {
     "name": "staticlocal"
@@ -16,6 +16,7 @@
   "dependencies": {
     "@babel/core": "~7.0.0-beta.38",
     "@babel/preset-env": "~7.0.0-beta.38",
+    "address": "^1.2.2",
     "autoprefixer": "~7.2.5",
     "babel-eslint": "~8.2.1",
     "babel-loader": "~8.0.0-beta.0",
@@ -26,7 +27,9 @@
     "extract-text-webpack-plugin": "~3.0.2",
     "file-loader": "~1.1.6",
     "globby": "~7.1.1",
+    "graceful-process": "^1.2.0",
     "is-type-of": "~1.2.0",
+    "koa": "^2.14.1",
     "koa-webpack-dev-middleware": "~2.0.2",
     "koa-webpack-hot-middleware": "~1.0.3",
     "less": "~2.7.3",
@@ -37,17 +40,18 @@
     "rucksack-css": "~1.0.2",
     "style-loader": "~0.20.1",
     "url-loader": "~0.6.2",
-    "webpack": "~3.10.0"
+    "webpack": "~3.10.0",
+    "webpack-hot-middleware": "^2.25.3"
   },
   "devDependencies": {
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
     "coffee": "^4.1.0",
     "egg": "^2.2.0",
-    "egg-bin": "^4.3.7",
+    "egg-bin": "^5",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.14.0",
-    "egg-subapp": "^1.2.0",
+    "egg-subapp": "^2",
     "egg-view-nunjucks": "^2.1.6",
     "eslint": "^4.14.0",
     "eslint-config-egg": "^6.0.0",
